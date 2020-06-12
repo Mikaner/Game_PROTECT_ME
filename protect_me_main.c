@@ -13,7 +13,7 @@ int intro(){
     int co=0;
     printf("Welcome to this world.\n");
     printf("説明がほしいか？\n");
-    printf("君は選ばれたんだ。選ばれるのは好きだろ？喜びたまえ。S\n\n");
+    printf("君は選ばれたんだ。選ばれるのは好きだろ？喜びたまえ。\n\n");
 
     printf("これ以上の説明はない。\n");
     printf("さあ、君のステージを選択したまえ。\n");
@@ -165,8 +165,9 @@ void show_dungeon(){
 void show_commands(){
     printf("0) Show all dungeon status.\n");
     printf("1-6) Choose the room.\n");
-    printf("27) Exit this game.\n");
-    printf("Else) No action.\n");
+    //printf("27) Exit this game.\n");
+    //printf("Else) No action.\n");
+    printf("Else) Exit this game.\n");
 }
 
 int main(){
@@ -193,9 +194,10 @@ int main(){
         case 4:
         case 5:
         case 6:
-            show_room(1,0,0);
+            show_room(input_num,0,0);
             break;
         default:
+            exit(0);
             break;
         }
         printf("\n");
