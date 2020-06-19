@@ -13,7 +13,11 @@ void Stage_construct(Stage* const p_this, int stage_number, int stage_cost);
 
 void Stage_set_module(Stage* const p_this, Module module, int room_num, int posision);
 
-int Stage_get_module(Stage* const p_this, int room_num, int posision);
+int Stage_get_module_id(Stage* const p_this, int room_num, int posision);
+
+Module* Stage_get_module(Stage* const p_this, int room_num, int posision);
+
+Rooms* Stage_get_room(Stage* const p_this, int room_num);
 
 int Stage_get_last_room_flag(Stage* const p_this);
 

@@ -62,7 +62,9 @@ int Module_get_magic_buff(Module* const p_this){
     return p_this->magical_buff;
 }
 
-void Module_be_attacked(Module* const p_this, int weapon, int power){
+void Module_be_attacked(Module* const p_this, Module* enemy){
+    int weapon = Module_get_weapon(enemy);
+    int power = Module_get_attack_power(enemy);
     if (weapon==0){
         p_this->hitpoint -= (power-p_this->physical_resistance);
     }else{

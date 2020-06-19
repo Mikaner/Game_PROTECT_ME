@@ -31,6 +31,6 @@ int Module_get_magic_resistance(Module* const p_this);
 int Module_get_physical_buff(Module* const p_this);
 int Module_get_magic_buff(Module* const p_this);
 
-void Module_be_attacked(Module* const p_this,int weapon, int power);
+void Module_be_attacked(Module* const p_this, Module* enemy);
 
 #endif

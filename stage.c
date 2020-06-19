@@ -14,10 +14,21 @@ void Stage_set_module(Stage* const p_this, Module module, int room_num, int posi
     Rooms_set_module(&(p_this->rooms[room_num]), module, posision);
 }
 
-int Stage_get_module(Stage* const p_this, int room_num, int posision){
+int Stage_get_module_id(Stage* const p_this, int room_num, int posision){
     Rooms* room = &(p_this->rooms[room_num]);
     Module mod = room->room[posision];
     return Module_get_id(&mod);
+}
+
+Module* Stage_get_module(Stage* const p_this, int room_num, int posision){
+    Rooms* room = &(p_this->rooms[room_num]);
+    Module* mod = &(room->room[posision]);
+    return mod;
+}
+
+Rooms* Stage_get_room(Stage* const p_this, int room_num){
+    Rooms* room = &(p_this->rooms[room_num]);
+    return room;
 }
 
 int Stage_get_last_room_flag(Stage* const p_this){
