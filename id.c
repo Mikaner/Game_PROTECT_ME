@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "id.h"
 
 void Id_construct(Id* const p_this){

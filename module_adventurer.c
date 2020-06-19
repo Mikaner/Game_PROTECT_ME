@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "Module.h"
 #include "Module_adventurer.h"
 #include "Id.h"
