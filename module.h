@@ -19,7 +19,7 @@ typedef struct module{
 }Module;
 
 void Module_init_construct( Module* const p_this);
-void Module_construct(Module* const p_this, Id p_id, int location, int weapon, int range);
+void Module_construct(Module* const p_this, Id* p_id, int location, int weapon, int range, int power);
 
 int Module_get_id(Module* const p_this);
 int Module_get_hitpoint(Module* const p_this);

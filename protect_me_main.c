@@ -46,11 +46,9 @@ int get_stage_cost(int input_stage){
     }
 }
 
-void init_game(int stage_num, int stage_cost){
-    Id identification;
-    Stage stage;
-    Id_construct(&identification);
-    Stage_construct(&stage, stage_num, stage_cost);
+void init_game(Id* identification, Stage* stage, int stage_num, int stage_cost){
+    Id_construct(identification);
+    Stage_construct(stage, stage_num, stage_cost);
 }
 
 void init_timer(){
@@ -90,20 +88,20 @@ void show_room(int room_num1, int room_num2, int room_num3){
     printf("\n");
     
     for(int i=0; i<3;i++){
-        if(room_num1==1){
+        if(room_num1!=0){
             show_room_status("No module");
         }else{
             printf("                  ");
         }
         printf(" ");
 
-        if(room_num2==1){
+        if(room_num2!=0){
             show_room_status("No module");
         }else{
             printf("                  ");
         }
         printf(" ");
-        if(room_num3==1){
+        if(room_num3!=0){
             show_room_status("No module");
         }else{
             printf("                  ");
@@ -163,18 +161,20 @@ void show_dungeon(){
 }
 
 void show_commands(){
-    printf("0) Show all dungeon status.\n");
+    printf("0) Exit this game.\n");
     printf("1-6) Choose the room.\n");
     //printf("27) Exit this game.\n");
     //printf("Else) No action.\n");
-    printf("Else) Exit this game.\n");
+    printf("Else) Show all dungeon status.\n");
 }
 
 int main(){
+    Id identification;
+    Stage stage;
     int stage_num = intro();
     int stage_cost = get_stage_cost(stage_num);
     int input_num;
-    init_game(stage_num, stage_cost);
+    init_game(&identification, &stage, stage_num, stage_cost);
     init_timer();
     printf("Success to make stage.\n\n");
 
@@ -186,7 +186,7 @@ int main(){
         switch (input_num)
         {
         case 0:
-            show_dungeon();
+            exit(0);
             break;
         case 1:
         case 2:
@@ -197,7 +197,7 @@ int main(){
             show_room(input_num,0,0);
             break;
         default:
-            exit(0);
+            show_dungeon();
             break;
         }
         printf("\n");

@@ -17,9 +17,9 @@ void Module_init_construct(Module* const p_this){
     p_this->magical_buff = 0;
 }
 
-void Module_construct(Module* const p_this, Id p_id,
-                      int location, int weapon, int range){
-    p_this->id = Id_get_id(&p_id);
+void Module_construct(Module* const p_this, Id* p_id,
+                      int location, int weapon, int range, int power){
+    p_this->id = Id_get_id(p_id);
     p_this->level = 1;
     p_this->levelup_base_cost = 5;
     p_this->hitpoint = 10;
@@ -27,7 +27,7 @@ void Module_construct(Module* const p_this, Id p_id,
     p_this->location = location;
     p_this->weapon = weapon;
     p_this->range = range;
-    p_this->power = 1;
+    p_this->power = power;
     p_this->physical_resistance = 0;
     p_this->magic_resistance = 0;
     p_this->physical_buff = 0;
