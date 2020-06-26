@@ -14,23 +14,23 @@
 
 void Module_adventurer_construct(Module_adventurer* const p_this, Id* p_id){
     Module_construct((Module*)p_this, p_id, num_of_adventurer, location_adventurer, physical_weapon, 1, normal_power);
-    p_this->posision = 0;
+    p_this->position = 0;
 }
 
 void Module_physical_adventurer_construct(Module_adventurer* const p_this, Id* p_id){
     Module_construct((Module*)p_this, p_id, num_of_adventurer, location_adventurer, physical_weapon, 1, normal_power);
-    p_this->posision = 0;
+    p_this->position = 0;
 }
 
 void Module_magical_adventurer_construct(Module_adventurer* const p_this, Id* p_id){
     Module_construct((Module*)p_this, p_id, num_of_adventurer, location_adventurer, magical_weapon, 1, normal_power);
-    p_this->posision = 0;
+    p_this->position = 0;
 }
 
-void Module_adventurer_set_posision(Module_adventurer* const p_this, int posision){
-    p_this->posision = posision;
+void Module_adventurer_set_position(Module_adventurer* const p_this, int position){
+    p_this->position = position;
 }
 
-int Module_adventurer_get_posision(Module_adventurer* const p_this){
-    return p_this->posision;
+int Module_adventurer_get_position(Module_adventurer* const p_this){
+    return p_this->position;
 }
