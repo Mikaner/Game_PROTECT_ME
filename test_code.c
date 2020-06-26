@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "Id.h"
 #include "Module.h"
 #include "Module_adventurer.h"
@@ -13,7 +14,7 @@ int main(){
     
     Module_adventurer* group[500];
     for(int i=0; i<500; i++){
-        Module_adventurer advent = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        Module_adventurer advent = {0,-1,0,0,0,0,0,0,0,0,0,0,0,0,0};
         Module_adventurer_construct(&advent,&identification);
         group[i] = &advent;
     }
@@ -23,4 +24,6 @@ int main(){
         printf("pointer %p\n", &*group[i]);
     }
     printf("length %ld\n", ((sizeof group)/(sizeof(struct Module_adventurer*))));
+    char* s = "Module";
+    printf(" %*s%*s \n",8+(int)strlen(s)/2,s,8-(int)strlen(s)/2,"");
 }

@@ -4,6 +4,7 @@
 
 typedef struct module{
     int id;
+    int module_num;
     int location;
     int level;
     int levelup_base_cost;
@@ -19,9 +20,10 @@ typedef struct module{
 }Module;
 
 void Module_init_construct( Module* const p_this);
-void Module_construct(Module* const p_this, Id* p_id, int location, int weapon, int range, int power);
+void Module_construct(Module* const p_this, Id* p_id, int module_num, int location, int weapon, int range, int power);
 
 int Module_get_id(Module* const p_this);
+int Module_get_num(Module* const p_this);
 int Module_get_hitpoint(Module* const p_this);
 int Module_get_weapon(Module* const p_this);
 int Module_get_attack_power(Module* const p_this);

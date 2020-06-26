@@ -4,6 +4,7 @@
 
 void Module_init_construct(Module* const p_this){
     p_this->id = 0;
+    p_this->module_num = -1;
     p_this->level = 0;
     p_this->levelup_base_cost = 0;
     p_this->hitpoint = 0;
@@ -19,8 +20,9 @@ void Module_init_construct(Module* const p_this){
 }
 
 void Module_construct(Module* const p_this, Id* p_id,
-                      int location, int weapon, int range, int power){
+                      int module_num, int location, int weapon, int range, int power){
     p_this->id = Id_get_id(p_id);
+    p_this->module_num = module_num;
     p_this->level = 1;
     p_this->levelup_base_cost = 5;
     p_this->hitpoint = 10;
@@ -37,6 +39,9 @@ void Module_construct(Module* const p_this, Id* p_id,
 
 int Module_get_id(Module* const p_this){
     return p_this->id;
+}
+int Module_get_num(Module* const p_this){
+    return p_this->module_num;
 }
 int Module_get_hitpoint(Module* const p_this){
     return p_this->hitpoint;

@@ -3,9 +3,37 @@
 #include <stdlib.h>
 #include <time.h>
 #include "Id.h"
-#include "Module.h"
 #include "Stage.h"
+#include "Module.h"
+#include "Module_adventurer.h"
+#include "Module_boss.h"
+#include "Module_skeleton.h"
 #define ESC 27
+#define num_of_adventurer 1
+#define num_of_boss 2
+#define num_of_skeleton 3
+#define max_module_type 2
+
+char* get_module_name(int module_num){
+    switch (module_num)
+    {
+    case 0:
+        return "No Name";
+        break;
+    case 1:
+        return "Adventurer";
+        break;
+    case 2:
+        return "Boss";
+        break;
+    case 3:
+        return "Skeleton";
+        break;
+    default:
+        return "No Module";
+        break;
+    }
+}
 
 int intro(){
     int input_stage_num;
@@ -24,8 +52,12 @@ int intro(){
     }
     printf("\n");
     do{
-        if (co>1){
+        if (co>1 && co<=5){
             printf("なんだ？1を入れなければ進まないぞ？\n");
+        }else if (co>5){
+            printf("ああ、やめたいのか。仕方ないな...\n");
+            printf("じゃあな。\n");
+            exit(0);
         }
         printf("input --> ");
         scanf("%d", &input_stage_num);
@@ -56,31 +88,32 @@ void init_timer(){
 }
 
 void show_room_status(char *name){
-    printf("|%*s%*s|",8+strlen(name)/2,name,8-strlen(name)/2,"");
+    printf("|%*s%*s|",8+(int)strlen(name)/2,name,8-(int)strlen(name)/2,"");
 }
 
 void show_route(char* a, char* c){
-    printf(" %*s%*s ",8+strlen(a)/2,a,8-strlen(a)/2,"");
-    printf("  %*s%*s  ",8+strlen("|")/2,"|",8-strlen("|")/2,"");
-    printf(" %*s%*s ",8+strlen(c)/2,c,8-strlen(c)/2,"");
+    printf(" %*s%*s ",8+(int)strlen(a)/2,a,8-(int)strlen(a)/2,"");
+    printf("  %*s%*s  ",8+(int)strlen("|")/2,"|",8-(int)strlen("|")/2,"");
+    printf(" %*s%*s ",8+(int)strlen(c)/2,c,8-(int)strlen(c)/2,"");
     printf("\n");
 }
 
-void show_room(int room_num1, int room_num2, int room_num3){
-    if(room_num1!=0){
+void show_room(Stage* stage, int room_num1, int room_num2, int room_num3){
+    char* module_name;
+    if(room_num1!=-1){
         printf("------------------");
     }else{
         printf("                  ");
     }
     printf(" ");
 
-    if(room_num2!=0){
+    if(room_num2!=-1){
         printf("------------------");
     }else{
         printf("                  ");
     }
     printf(" ");
-    if(room_num3!=0){
+    if(room_num3!=-1){
         printf("------------------");
     }else{
         printf("                  ");
@@ -88,40 +121,43 @@ void show_room(int room_num1, int room_num2, int room_num3){
     printf("\n");
     
     for(int i=0; i<3;i++){
-        if(room_num1!=0){
-            show_room_status("No module");
+        if(room_num1!=-1){
+            module_name = get_module_name(Module_get_num(Stage_get_module(stage, room_num1,i)));
+            show_room_status(module_name);
         }else{
             printf("                  ");
         }
         printf(" ");
 
-        if(room_num2!=0){
-            show_room_status("No module");
+        if(room_num2!=-1){
+            module_name = get_module_name(Module_get_num(Stage_get_module(stage, room_num2,i)));
+            show_room_status(module_name);
         }else{
             printf("                  ");
         }
         printf(" ");
-        if(room_num3!=0){
-            show_room_status("No module");
+        if(room_num3!=-1){
+            module_name = get_module_name(Module_get_num(Stage_get_module(stage, room_num3,i)));
+            show_room_status(module_name);
         }else{
             printf("                  ");
         }
         printf("\n");
     }
-    if(room_num1!=0){
+    if(room_num1!=-1){
         printf("------------------");
     }else{
         printf("                  ");
     }
     printf(" ");
 
-    if(room_num2!=0){
+    if(room_num2!=-1){
         printf("------------------");
     }else{
         printf("                  ");
     }
     printf(" ");
-    if(room_num3!=0){
+    if(room_num3!=-1){
         printf("------------------");
     }else{
         printf("                  ");
@@ -129,43 +165,68 @@ void show_room(int room_num1, int room_num2, int room_num3){
     printf("\n");
 }
 
-void show_entrance_room(){
+void show_entrance_room(Stage* stage){
     char* s = "entrance";
     printf("                   ");
-    printf(" %*s%*s ",8+strlen(s)/2,s,8-strlen(s)/2,"");
+    printf(" %*s%*s ",8+(int)strlen(s)/2,s,8-(int)strlen(s)/2,"");
     printf("\n");
     show_route("  ","  ");
-    show_room(0,1,0);
+    show_room(stage,-1,0,-1);
 }
-void show_before_core_room(){
+void show_before_core_room(Stage* stage){
     char* s = "to core room";
-    show_room(0,1,0);
+    show_room(stage,-1,5,-1);
     show_route("  ","  ");
     printf("                   ");
-    printf(" %*s%*s ",8+strlen(s)/2,s,8-strlen(s)/2,"");
+    printf(" %*s%*s ",8+(int)strlen(s)/2,s,8-(int)strlen(s)/2,"");
     printf("\n\n");
 }
 
-void show_dungeon(){
-    show_entrance_room();
+void show_dungeon(Stage* stage){
+    show_entrance_room(stage);
 
     show_route("               /","\\               ");
     
-    show_room(1,1,1);
+    show_room(stage,1,2,3);
 
     show_route("               \\","/               ");
 
-    show_room(0,1,0);
+    show_room(stage,-1,4,-1);
     show_route("  ","  ");
-    show_before_core_room();
+    show_before_core_room(stage);
 }
 
 void show_commands(){
     printf("0) Exit this game.\n");
     printf("1-6) Choose the room.\n");
-    //printf("27) Exit this game.\n");
-    //printf("Else) No action.\n");
     printf("Else) Show all dungeon status.\n");
+}
+
+void show_module_commands(){
+    printf("Please input module number.\n");
+    printf("0) Exit this game.\n");
+    printf("1) Set Boss.\n");
+    printf("2) Set Skeleton.\n");
+    printf("Else) Back.\n");
+}
+
+void set_module_to_room(Id* identificaton, Stage* stage, int room_num, int module_type, int module_position){
+    Rooms* room = Stage_get_room(stage, room_num);
+    Module mdl = {0,-1,0,0,0,0,0,0,0,0,0,0,0,0};
+    printf("type is :%d\n",module_type);
+    switch (module_type)
+    {
+    case num_of_boss:
+        Module_boss_construct((Module_boss*)&mdl, identificaton);
+        Rooms_set_module(room, mdl, module_position);
+        break;
+    case num_of_skeleton:
+        Module_skeleton_construct((Module_skeleton*)&mdl, identificaton);
+        Rooms_set_module(room, mdl, module_position);
+    default:
+        printf("404 Module not found.\n");
+        break;
+    }
 }
 
 int main(){
@@ -173,13 +234,13 @@ int main(){
     Stage stage;
     int stage_num = intro();
     int stage_cost = get_stage_cost(stage_num);
-    int input_num;
+    int input_num=-1;
     init_game(&identification, &stage, stage_num, stage_cost);
     init_timer();
     printf("Success to make stage.\n\n");
 
-    show_dungeon();
-    while(input_num!=ESC){
+    show_dungeon(&stage);
+    while(input_num!=0){
         show_commands();
         printf("--> ");
         scanf("%d",&input_num);
@@ -194,10 +255,36 @@ int main(){
         case 4:
         case 5:
         case 6:
-            show_room(input_num,0,0);
+            show_room(&stage,input_num,-1,-1);
+            int input_module_type=-1;
+            while (input_module_type<0 || input_module_type>2)
+            {
+                show_module_commands();
+                printf(">>> ");
+                scanf("%d",&input_module_type);
+                if(input_module_type==0) exit(0);
+                if(input_module_type<1){
+                    printf("That module is not signed up.\n");
+                    continue;
+                }else if(input_module_type > max_module_type){
+                    break;
+                }
+                int input_module_position=0;
+                while(input_module_position<1 || input_module_position>3){
+                    printf("Please input this module position.\n");
+                    printf("0) Exit this game.\n");
+                    printf("1-3) Set position.\n");
+                    printf("Else) Retry.\n");
+                    printf(">>> ");
+                    scanf("%d",&input_module_position);
+                    if(input_module_position==0) exit(0);
+                }
+                set_module_to_room(&identification,&stage,input_num-1,input_module_type+1, input_module_position-1);
+            }
+            show_dungeon(&stage);
             break;
         default:
-            show_dungeon();
+            show_dungeon(&stage);
             break;
         }
         printf("\n");

@@ -2,7 +2,7 @@
 #include "id.h"
 
 void Id_construct(Id* const p_this){
-    p_this->id = 0;
+    p_this->id = 1;
 }
 
 int Id_get_id(Id* const p_this){
