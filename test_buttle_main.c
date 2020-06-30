@@ -41,7 +41,7 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
     Module* middle = Stage_get_module(stage, room_pointer, 1);
     Module* back = Stage_get_module(stage, room_pointer, 2);
     int co = 0;
-    // 無限ループ注意
+    // Battle
     while(Rooms_get_flag(room)==0 && pointer < max_adventurer){
         printf("turn %d\n",++co);
         printf("Adventurer HP: %d\n", Module_get_hitpoint((Module*)&adventurer_group[pointer]));
@@ -235,6 +235,9 @@ int battle(Stage* stage, Id* identification, long int length){
                     break;
                 }
                 if(flg1 && flg2 && flg3){
+                    flg1=0;
+                    flg2=0;
+                    flg3=0;
                     count++;
                 }
             }
