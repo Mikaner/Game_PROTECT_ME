@@ -40,14 +40,21 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
     Module* front = Stage_get_module(stage, room_pointer, 0);
     Module* middle = Stage_get_module(stage, room_pointer, 1);
     Module* back = Stage_get_module(stage, room_pointer, 2);
+    int co = 0;
     // 無限ループ注意
     while(Rooms_get_flag(room)==0 && pointer < max_adventurer){
+        printf("turn %d\n",++co);
+        printf("Adventurer HP: %d\n", Module_get_hitpoint((Module*)&adventurer_group[pointer]));
+        printf("Front HP : %d\n", Module_get_hitpoint(front));
+        printf("Middle HP : %d\n", Module_get_hitpoint(middle));
+        printf("Back HP : %d\n\n", Module_get_hitpoint(back));
         // Move module pointer
         while(Module_get_hitpoint((Module*)&adventurer_group[pointer])<=0){
             printf("Pointer %d HP: %d\n",pointer,Module_get_hitpoint((Module*)&adventurer_group[pointer]));
             pointer++;
             if(pointer>=max_adventurer) break;
         }
+        if(pointer>=max_adventurer) break;
         // Buttle adventurer vs front
         if(Module_get_hitpoint(front)>0){
             // Check adventurer hp
@@ -66,6 +73,7 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
             // Check front hp
             if(Module_get_hitpoint(front)>0){
                 // Front attack to adventurer <-- need to check
+                printf("%d\n",Module_get_hitpoint((Module*)&adventurer_group[pointer]));
                 Module_be_attacked((Module*)&adventurer_group[pointer], front);
             }else{
                 // Move adventurer position
@@ -93,6 +101,7 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
                 }
             }
             // Check to be adventurer in middle's range <-- need to check
+            // Need to add checker for adventurer hp
             if(Module_get_hitpoint(middle)>0 && 3-Module_adventurer_get_position(&adventurer_group[pointer])<=Module_get_range(middle)){
                 // Middle attack to adventurer <-- need to check
                 Module_be_attacked((Module*)&adventurer_group[pointer], middle);
@@ -108,27 +117,29 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
         }
         // Chack back hp
         if(Module_get_hitpoint(back)>0){
-            // Check front hp and middle hp -- for adventurer to attack back.
-            if(Module_get_hitpoint(front)<=0&&Module_get_hitpoint(middle)<=0){
-                // Check adventurer hp
-                if(Module_get_hitpoint((Module*)&adventurer_group[pointer])>0){
+            // Check adventurer hp
+            if(Module_get_hitpoint((Module*)&adventurer_group[pointer])>0){
+                // Check front hp and middle hp -- for adventurer to attack back.
+                if(Module_get_hitpoint(front)<=0&&Module_get_hitpoint(middle)<=0){
                     // Adventurer attack to back
-                    Module_be_attacked(back, (Module*)&adventurer_group[pointer]);
-                }else{
-                    // Move adventurer pointer. <-- Dose this need ?
-                    while(Module_get_hitpoint((Module*)&adventurer_group[pointer])<=0){
-                        printf("Pointer %d HP: %d\n",pointer,Module_get_hitpoint((Module*)&adventurer_group[pointer]));
-                        pointer++;
-                        if(pointer>=max_adventurer) break;
-                    }
+                    Module_be_attacked(back, (Module*)&adventurer_group[pointer]); 
+                }
+            }else{
+                while(Module_get_hitpoint((Module*)&adventurer_group[pointer])<=0){
+                    printf("Pointer %d HP: %d\n",pointer,Module_get_hitpoint((Module*)&adventurer_group[pointer]));
+                    pointer++;
                     if(pointer>=max_adventurer) break;
                 }
+                if(pointer>=max_adventurer) break;
             }
+               
             // Check to be adventurer in back's range <-- need to check
-            if(Module_get_hitpoint(back)>0 && 4-Module_adventurer_get_position(&adventurer_group[pointer])<=Module_get_range(back))
+            if(4-Module_adventurer_get_position(&adventurer_group[pointer])<=Module_get_range(back))
                 // Front attack to adventurer <-- need to check
                 Module_be_attacked((Module*)&adventurer_group[pointer], back);
-        }else{
+        }
+        // The room is falled if there is no module.
+        if(Module_get_hitpoint(front)+Module_get_hitpoint(middle)+Module_get_hitpoint(back)<=0){
             // The room falled
             Rooms_set_flag(room);
         }
@@ -138,6 +149,7 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
     printf("Back's HP: %d\n",Module_get_hitpoint(back));
     for(int i = 0; i<max_adventurer; i++){
         printf("Adventurer HP: %d\n", Module_get_hitpoint((Module*)(&adventurer_group[i])));
+        Module_adventurer_set_position(&adventurer_group[i], 0);
     }
     return pointer;
 }
@@ -189,6 +201,9 @@ int battle(Stage* stage, Id* identification, long int length){
                     break;
                 }
                 if(flg1 && flg2 && flg3){
+                    flg1=0;
+                    flg2=0;
+                    flg3=0;
                     count++;
                 }
             }
@@ -236,6 +251,7 @@ int battle(Stage* stage, Id* identification, long int length){
             adventurer_pointer = battle_in_room(stage, room, adventurer_group, room_pointer, adventurer_pointer, max_adventurer);
             if(adventurer_pointer<max_adventurer){
                 room_pointer++;
+                adventurer_pointer = 0;
             }else{
                 break;
             }
