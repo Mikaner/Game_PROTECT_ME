@@ -1,36 +1,10 @@
 #include <stdio.h>
 #include "Id.h"
 #include "Module.h"
-#include "Module_skeleton.h"
-#include "Module_boss.h"
 #include "Module_adventurer.h"
 #include "Room.h"
 #include "Stage.h"
 
-void init_game(Id* identification, Stage* stage){
-    Id_construct(identification);
-    Stage_construct(stage, 0, 20);
-}
-/*
-Module* set_skeleton(Id* identification){
-    Module_skeleton skeleton;
-    Module_skeleton_construct(&skeleton, identification);
-    Module* m = (Module*)&skeleton;
-    return m;
-}
-*/
-
-void set_up(Id* identification, Stage* stage){
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            Module* skeleton = Stage_get_module(stage, i, j);
-            Module_skeleton_construct((Module_skeleton*)skeleton, identification);
-            Stage_set_module(stage, *skeleton, i, j);
-        }
-    }
-}
 
 int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_group,  int room_pointer, int adventurer_pointer, long int length){
     printf("Buttle in Room %d\n", room_pointer+1);
@@ -41,6 +15,13 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
     Module* middle = Stage_get_module(stage, room_pointer, 1);
     Module* back = Stage_get_module(stage, room_pointer, 2);
     int co = 0;
+    printf("Front's HP: %d\n",Module_get_hitpoint(front));
+    printf("Middle's HP: %d\n",Module_get_hitpoint(middle));
+    printf("Back's HP: %d\n",Module_get_hitpoint(back));
+    for(int i = 0; i<max_adventurer; i++){
+        printf("Adventurer HP: %d\n", Module_get_hitpoint((Module*)(&adventurer_group[i])));
+        Module_adventurer_set_position(&adventurer_group[i], 0);
+    }
     // Battle
     while(Rooms_get_flag(room)==0 && pointer < max_adventurer){
         printf("turn %d\n",++co);
@@ -246,7 +227,13 @@ int battle(Stage* stage, Id* identification, long int length){
                ad3_pointer<(num_of_arriving_adventurer)/3)
             {
                 room_pointer = room_pointer+3;
+                printf("room pointer : %d\n",room_pointer);
             }else{
+                printf("Max Pointer1: %d, Max Pointer2: %d, Max Pointer3: %d\n",
+                        (num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==1 || num_of_arriving_adventurer%3==2),
+                        (num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==2),
+                        (num_of_arriving_adventurer)/3);
+                printf("Ad1 Pointer : %d, Ad2 Pointer : %d, Ad3 Pointer : %d\n",ad1_pointer,ad2_pointer,ad3_pointer);
                 break;
             }
         }else{
@@ -254,6 +241,7 @@ int battle(Stage* stage, Id* identification, long int length){
             adventurer_pointer = battle_in_room(stage, room, adventurer_group, room_pointer, adventurer_pointer, max_adventurer);
             if(adventurer_pointer<max_adventurer){
                 room_pointer++;
+                printf("room pointer : %d\n",room_pointer);
                 adventurer_pointer = 0;
             }else{
                 break;
@@ -262,41 +250,4 @@ int battle(Stage* stage, Id* identification, long int length){
         
     }
     return room_pointer;
-}
-
-int main(){
-    Id identification;
-    Stage stage;
-    init_game(&identification, &stage);
-    set_up(&identification, &stage);
-    printf("Success to set module to room in stage\n");
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            int id_num = Stage_get_module_id(&stage, i,j);
-            printf("%d",id_num);
-        }
-    }
-    printf("\n");
-
-    long int adventurer_length = -1;
-    while(adventurer_length<0){
-        printf("How many adventurer will be came ? > ");
-        scanf("%ld",&adventurer_length);
-        if(adventurer_length<0){
-            printf("Please input non-negative integer.\n");
-        }
-    }
-
-    int cleared_room = battle(&stage, &identification, adventurer_length);
-    printf("Cleared Room : %d\n",cleared_room);
-    printf("Success to battle\n");
-    if(cleared_room>=6){
-        printf("The dungeon has fallen.\n");
-    }else{
-        printf("Success to protected the dungeon!\n");
-    }
-    
-    return 0;
 }

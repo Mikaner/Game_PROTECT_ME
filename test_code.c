@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "Id.h"
 #include "Module.h"
 #include "Module_adventurer.h"

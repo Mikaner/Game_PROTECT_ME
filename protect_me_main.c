@@ -2,17 +2,29 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <windows.h>
 #include "Id.h"
 #include "Stage.h"
 #include "Module.h"
 #include "Module_adventurer.h"
 #include "Module_boss.h"
 #include "Module_skeleton.h"
+#include "battle.h"
 #define ESC 27
 #define num_of_adventurer 1
 #define num_of_boss 2
 #define num_of_skeleton 3
 #define max_module_type 2
+
+Id identification;
+Stage stage;
+pthread_mutex_t mutex;
+
+char* get_module_name(int module_num);
+int intro();
+void do_battle(void);
 
 char* get_module_name(int module_num){
     switch (module_num)
@@ -83,8 +95,13 @@ void init_game(Id* identification, Stage* stage, int stage_num, int stage_cost){
     Stage_construct(stage, stage_num, stage_cost);
 }
 
-void init_timer(){
-    double start_time = clock()/CLOCKS_PER_SEC;
+void *timer(void *seconds){
+    //double start_time = clock()/CLOCKS_PER_SEC;
+    int millis = (*(int*)seconds) * 1000;
+    Sleep(millis);
+    printf("%d millis have passed.\n", millis);
+
+    do_battle();
 }
 
 void show_room_status(char *name){
@@ -230,13 +247,15 @@ void set_module_to_room(Id* identificaton, Stage* stage, int room_num, int modul
 }
 
 int main(){
-    Id identification;
-    Stage stage;
+    pthread_t pthread;
+    //unsigned int max_count = 60*10;
+    unsigned int max_count = 50;
+
     int stage_num = intro();
     int stage_cost = get_stage_cost(stage_num);
     int input_num=-1;
     init_game(&identification, &stage, stage_num, stage_cost);
-    init_timer();
+    pthread_create( &pthread, NULL, &timer, &max_count);
     printf("Success to make stage.\n\n");
 
     show_dungeon(&stage);
@@ -244,6 +263,7 @@ int main(){
         show_commands();
         printf("--> ");
         scanf("%d",&input_num);
+        printf("\n");
         switch (input_num)
         {
         case 0:
@@ -262,6 +282,7 @@ int main(){
                 show_module_commands();
                 printf(">>> ");
                 scanf("%d",&input_module_type);
+                printf("\n");
                 if(input_module_type==0) exit(0);
                 if(input_module_type<1){
                     printf("That module is not signed up.\n");
@@ -274,15 +295,17 @@ int main(){
                     printf("Please input this module position.\n");
                     printf("0) Exit this game.\n");
                     printf("1-3) Set position.\n");
-                    printf("Else) Retry.\n");
+                    printf("Else) Back.\n");
                     printf(">>> ");
                     scanf("%d",&input_module_position);
+                    printf("\n");
                     if(input_module_position==0) exit(0);
+                    set_module_to_room(&identification,&stage,input_num-1,input_module_type+1, input_module_position-1);
                 }
-                set_module_to_room(&identification,&stage,input_num-1,input_module_type+1, input_module_position-1);
             }
             show_dungeon(&stage);
             break;
+        case -200:
         default:
             show_dungeon(&stage);
             break;
@@ -290,4 +313,27 @@ int main(){
         printf("\n");
     }
     return 0;
+}
+
+void do_battle(void){
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            int id_num = Stage_get_module_id(&stage, i,j);
+            printf("%d",id_num);
+        }
+    }
+    printf("\n");
+
+    long int adventurer_length = 20;
+
+    int cleared_room = battle(&stage, &identification, adventurer_length);
+    printf("Cleared Room : %d\n",cleared_room);
+    printf("Success to battle\n");
+    if(cleared_room>=6){
+        printf("The dungeon has fallen.\n");
+    }else{
+        printf("Success to protected the dungeon!\n");
+    }
 }
