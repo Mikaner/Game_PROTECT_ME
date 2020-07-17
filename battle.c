@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <windows.h>
 #include "Id.h"
 #include "Module.h"
 #include "Module_adventurer.h"
@@ -15,20 +16,22 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
     Module* middle = Stage_get_module(stage, room_pointer, 1);
     Module* back = Stage_get_module(stage, room_pointer, 2);
     int co = 0;
-    printf("Front's HP: %d\n",Module_get_hitpoint(front));
+    /*printf("Front's HP: %d\n",Module_get_hitpoint(front));
     printf("Middle's HP: %d\n",Module_get_hitpoint(middle));
     printf("Back's HP: %d\n",Module_get_hitpoint(back));
     for(int i = 0; i<max_adventurer; i++){
         printf("Adventurer HP: %d\n", Module_get_hitpoint((Module*)(&adventurer_group[i])));
         Module_adventurer_set_position(&adventurer_group[i], 0);
-    }
+    }*/
     // Battle
     while(Rooms_get_flag(room)==0 && pointer < max_adventurer){
-        printf("turn %d\n",++co);
+        /*printf("turn %d\n",++co);
+        printf("Adventurer Pointer: %d\n",pointer);
         printf("Adventurer HP: %d\n", Module_get_hitpoint((Module*)&adventurer_group[pointer]));
+        printf("Adventurer Position: %d\n", Module_adventurer_get_position(&adventurer_group[pointer]));
         printf("Front HP : %d\n", Module_get_hitpoint(front));
         printf("Middle HP : %d\n", Module_get_hitpoint(middle));
-        printf("Back HP : %d\n\n", Module_get_hitpoint(back));
+        printf("Back HP : %d\n\n", Module_get_hitpoint(back));*/
         // Move module pointer
         while(Module_get_hitpoint((Module*)&adventurer_group[pointer])<=0){
             printf("Pointer %d HP: %d\n",pointer,Module_get_hitpoint((Module*)&adventurer_group[pointer]));
@@ -45,7 +48,7 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
             }else{
                 // Incriment adventurer pointer
                 while(Module_get_hitpoint((Module*)&adventurer_group[pointer])<=0){
-                    printf("Pointer %d HP: %d\n",pointer,Module_get_hitpoint((Module*)&adventurer_group[pointer]));
+                    printf("Adventurer %d HP: %d\n",pointer+1,Module_get_hitpoint((Module*)&adventurer_group[pointer]));
                     pointer++;
                     if(pointer>=max_adventurer) break;
                 }
@@ -54,13 +57,14 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
             // Check front hp
             if(Module_get_hitpoint(front)>0){
                 // Front attack to adventurer <-- need to check
-                printf("%d\n",Module_get_hitpoint((Module*)&adventurer_group[pointer]));
+                //printf("%d\n",Module_get_hitpoint((Module*)&adventurer_group[pointer]));
                 Module_be_attacked((Module*)&adventurer_group[pointer], front);
-            }else{
-                // Move adventurer position
-                for (int i = pointer; i < max_adventurer; i++) {
-                    Module_adventurer_set_position(&adventurer_group[i], 2);
-                }
+            }
+        }
+        if(Module_get_hitpoint(front)<=0){
+            // Move adventurer position
+            for (int i = pointer; i < max_adventurer; i++) {
+                Module_adventurer_set_position(&adventurer_group[i], 2);
             }
         }
         // Buttle adventurer vs middle
@@ -87,13 +91,13 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
                 // Middle attack to adventurer <-- need to check
                 Module_be_attacked((Module*)&adventurer_group[pointer], middle);
             }
-            // Check middle hp
-            if(Module_get_hitpoint(middle)<=0){
-                // Move adventurer position after defeating middle.
-                for (int i = pointer; i < max_adventurer; i++)
-                {
-                    Module_adventurer_set_position(&adventurer_group[i], 3);
-                }
+        }
+        // Check middle hp
+        if(Module_get_hitpoint(middle)<=0 && Module_get_hitpoint(front)<=0){
+            // Move adventurer position after defeating middle.
+            for (int i = pointer; i < max_adventurer; i++)
+            {
+                Module_adventurer_set_position(&adventurer_group[i], 3);
             }
         }
         // Chack back hp
@@ -120,7 +124,7 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
                 Module_be_attacked((Module*)&adventurer_group[pointer], back);
         }
         // The room is falled if there is no module.
-        if(Module_get_hitpoint(front)+Module_get_hitpoint(middle)+Module_get_hitpoint(back)<=0){
+        if(Module_get_hitpoint(front)<=0 && Module_get_hitpoint(middle)<=0 && Module_get_hitpoint(back)<=0){
             // The room falled
             Rooms_set_flag(room);
         }
@@ -128,10 +132,11 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
     printf("Front's HP: %d\n",Module_get_hitpoint(front));
     printf("Middle's HP: %d\n",Module_get_hitpoint(middle));
     printf("Back's HP: %d\n",Module_get_hitpoint(back));
-    for(int i = 0; i<max_adventurer; i++){
+    /*for(int i = 0; i<max_adventurer; i++){
         printf("Adventurer HP: %d\n", Module_get_hitpoint((Module*)(&adventurer_group[i])));
         Module_adventurer_set_position(&adventurer_group[i], 0);
-    }
+    }*/
+    Sleep(500);
     return pointer;
 }
 
@@ -152,7 +157,7 @@ int battle(Stage* stage, Id* identification, long int length){
     }
 
     printf("Success to set adventurer\n");
-    printf("Length :%ld\n", (sizeof adventurer_group)/ (sizeof( Module_adventurer)));
+    printf("Length :%ld\n\n", (sizeof adventurer_group)/ (sizeof( Module_adventurer)));
     long int max_adventurer = ((sizeof adventurer_group)/(sizeof( Module_adventurer)));
     
     while(room_pointer<max_room_num){
@@ -160,13 +165,17 @@ int battle(Stage* stage, Id* identification, long int length){
             int room1_pointer = 1;
             int room2_pointer = 2;
             int room3_pointer = 3;
-            int num_of_arriving_adventurer = max_adventurer-adventurer_pointer;
-            Module_adventurer ad_group1[(num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==1 || num_of_arriving_adventurer%3==2)];
+            //int num_of_arriving_adventurer = max_adventurer-adventurer_pointer;
+            /*Module_adventurer ad_group1[(num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==1 || num_of_arriving_adventurer%3==2)];
             Module_adventurer ad_group2[(num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==2)];
-            Module_adventurer ad_group3[(num_of_arriving_adventurer)/3];
-            int flg1,flg2,flg3;
+            Module_adventurer ad_group3[(num_of_arriving_adventurer)/3];*/
+            Module_adventurer ad_group1[(max_adventurer)/3 + 1*((max_adventurer)%3==1 || max_adventurer%3==2)];
+            Module_adventurer ad_group2[(max_adventurer)/3 + 1*((max_adventurer)%3==2)];
+            Module_adventurer ad_group3[(max_adventurer)/3];
+            int flg1=0,flg2=0,flg3=0;
             int count = 0;
-            for(int i = 0; i<num_of_arriving_adventurer; i++){
+            //for(int i = 0; i<num_of_arriving_adventurer; i++){
+            for(int i = 0; i<max_adventurer; i++){
                 switch(i%3){
                 case 0:
                     ad_group1[count] = adventurer_group[i+adventurer_pointer];
@@ -188,19 +197,46 @@ int battle(Stage* stage, Id* identification, long int length){
                     count++;
                 }
             }
+            count = 0;
+            //for(int i = 0; i<num_of_arriving_adventurer; i++){
+            for(int i = 0; i<max_adventurer; i++){
+                switch(i%3){
+                case 0:
+                    flg1=1;
+                    break;
+                case 1:
+                    flg2=1;
+                    break;
+                case 2:
+                    flg3=1;
+                    break;
+                }
+                if(flg1 && flg2 && flg3){
+                    flg1=0;
+                    flg2=0;
+                    flg3=0;
+                    count++;
+                }
+            }
             Rooms* room1 = Stage_get_room(stage, room1_pointer);
             Rooms* room2 = Stage_get_room(stage, room2_pointer);
             Rooms* room3 = Stage_get_room(stage, room3_pointer);
             printf("ad1\n");
+            //ad1_pointer = battle_in_room(stage, room1, ad_group1, room1_pointer, ad1_pointer,
+            //                             (num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==1 || num_of_arriving_adventurer%3==2));
             ad1_pointer = battle_in_room(stage, room1, ad_group1, room1_pointer, ad1_pointer,
-                                         (num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==1 || num_of_arriving_adventurer%3==2));
+                                         (max_adventurer)/3 + 1*((max_adventurer)%3==1 || max_adventurer%3==2));
             printf("ad2\n");
+            //ad2_pointer = battle_in_room(stage, room2, ad_group2, room2_pointer, ad2_pointer,
+            //                             (num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==2));
             ad2_pointer = battle_in_room(stage, room2, ad_group2, room2_pointer, ad2_pointer,
-                                         (num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==2));
+                                         (max_adventurer)/3 + 1*((max_adventurer)%3==2));
             printf("ad3\n");
-            ad3_pointer = battle_in_room(stage, room3, ad_group3, room3_pointer, ad3_pointer, (num_of_arriving_adventurer)/3);
+            //ad3_pointer = battle_in_room(stage, room3, ad_group3, room3_pointer, ad3_pointer, (num_of_arriving_adventurer)/3);
+            ad3_pointer = battle_in_room(stage, room3, ad_group3, room3_pointer, ad3_pointer, (max_adventurer)/3);
             count = 0;
-            for(int i = 0; i<num_of_arriving_adventurer; i++){
+            //for(int i = 0; i<num_of_arriving_adventurer; i++){
+            for(int i = 0; i<max_adventurer; i++){
                 switch(i%3){
                 case 0:
                     adventurer_group[i+adventurer_pointer] = ad_group1[count];
@@ -222,17 +258,23 @@ int battle(Stage* stage, Id* identification, long int length){
                     count++;
                 }
             }
-            if(ad1_pointer<(num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==1 || num_of_arriving_adventurer%3==2) || 
-               ad2_pointer<(num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==2) ||
-               ad3_pointer<(num_of_arriving_adventurer)/3)
+            //if(ad1_pointer<(num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==1 || num_of_arriving_adventurer%3==2) || 
+            //   ad2_pointer<(num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==2) ||
+            //   ad3_pointer<(num_of_arriving_adventurer)/3)
+            if(ad1_pointer<(max_adventurer)/3 + 1*((max_adventurer)%3==1 || max_adventurer%3==2) || 
+               ad2_pointer<(max_adventurer)/3 + 1*((max_adventurer)%3==2) ||
+               ad3_pointer<(max_adventurer)/3)
             {
                 room_pointer = room_pointer+3;
-                printf("room pointer : %d\n",room_pointer);
+                printf("room pointer : %d\n\n",room_pointer);
             }else{
                 printf("Max Pointer1: %d, Max Pointer2: %d, Max Pointer3: %d\n",
-                        (num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==1 || num_of_arriving_adventurer%3==2),
-                        (num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==2),
-                        (num_of_arriving_adventurer)/3);
+                //        (num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==1 || num_of_arriving_adventurer%3==2),
+                //        (num_of_arriving_adventurer)/3 + 1*((num_of_arriving_adventurer)%3==2),
+                //        (num_of_arriving_adventurer)/3);
+                        (max_adventurer)/3 + 1*((max_adventurer)%3==1 || max_adventurer%3==2),
+                        (max_adventurer)/3 + 1*((max_adventurer)%3==2),
+                        (max_adventurer)/3);
                 printf("Ad1 Pointer : %d, Ad2 Pointer : %d, Ad3 Pointer : %d\n",ad1_pointer,ad2_pointer,ad3_pointer);
                 break;
             }
@@ -241,7 +283,7 @@ int battle(Stage* stage, Id* identification, long int length){
             adventurer_pointer = battle_in_room(stage, room, adventurer_group, room_pointer, adventurer_pointer, max_adventurer);
             if(adventurer_pointer<max_adventurer){
                 room_pointer++;
-                printf("room pointer : %d\n",room_pointer);
+                printf("room pointer : %d\n\n",room_pointer);
                 adventurer_pointer = 0;
             }else{
                 break;
