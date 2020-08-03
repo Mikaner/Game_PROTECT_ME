@@ -21,6 +21,7 @@
 Id identification;
 Stage stage;
 pthread_mutex_t mutex;
+int time_up_flag = 0;
 
 char* get_module_name(int module_num);
 int intro();
@@ -47,45 +48,68 @@ char* get_module_name(int module_num){
     }
 }
 void print_game_clear(){
-    printf("  ■■■■                                                                                            ■            ■\n");
-    printf("■      ■                                                                                            ■            ■\n");
-    printf("■            ■      ■      ■■■■      ■■■■      ■■■        ■■■        ■■■          ■            ■\n");
-    printf("  ■          ■      ■    ■■          ■■          ■■  ■■    ■■          ■■              ■            ■\n");
-    printf("    ■■      ■      ■    ■            ■            ■      ■    ■■          ■■              ■            ■\n");
-    printf("      ■■    ■      ■    ■            ■            ■■■■■      ■■■        ■■■          ■            ■\n");
-    printf("        ■    ■    ■■    ■            ■            ■                  ■■          ■■                        \n");
-    printf("■    ■■    ■    ■■      ■    ■      ■    ■    ■■    ■    ■    ■■    ■    ■■        ■            ■\n");
-    printf("  ■■■        ■■■■      ■■■■      ■■■■      ■■■■    ■■■■      ■■■■          ■            ■\n\n");
+    printf("                  ■\n");
+    printf("    ■■■■■    ■                                            ■■    ■■\n");
+    printf("  ■■      ■    ■                                            ■■    ■■\n");
+    printf("■■              ■        ■■■■      ■■■      ■  ■■  ■■    ■■\n");
+    printf("■                ■      ■■    ■    ■      ■    ■■      ■■    ■■\n");
+    printf("■                ■      ■      ■■          ■    ■■      ■      ■\n");
+    printf("■                ■      ■■■■■■  ■■■■■    ■        ■      ■\n");
+    printf("■■              ■      ■            ■      ■    ■        ■      ■\n");
+    printf("  ■■      ■    ■      ■■          ■    ■■    ■\n");
+    printf("    ■■■■      ■        ■■■■    ■■■■■    ■        ■■    ■■\n");
 }
 
 void print_game_over(){
-
+    printf("    ■■■■■\n");
+    printf("  ■■      ■\n");
+    printf("■■                  ■■■      ■■■■    ■■        ■■■■              ■■■■    ■■      ■    ■■■■    ■  ■■\n");
+    printf("■                  ■      ■    ■■    ■■    ■    ■■    ■            ■■    ■■    ■      ■  ■■    ■    ■■\n");
+    printf("■        ■■■            ■    ■      ■      ■    ■      ■■          ■        ■    ■    ■    ■      ■■  ■■\n");
+    printf("■            ■    ■■■■■    ■      ■      ■    ■■■■■■          ■        ■    ■■  ■    ■■■■■■  ■\n");
+    printf("■■          ■    ■      ■    ■      ■      ■    ■                    ■        ■      ■  ■    ■            ■\n");
+    printf("  ■■      ■■    ■    ■■    ■      ■      ■    ■■                  ■■    ■■      ■■      ■■          ■\n");
+    printf("    ■■■■■      ■■■■■    ■      ■      ■      ■■■■              ■■■■          ■        ■■■■    ■        ■    ■    ■\n");
 }
 
 int intro(){
     int input_stage_num;
     int sum_stage=1;
     int co=0;
-    printf("Welcome to this world.\n");
-    printf("説明がほしいか？\n");
-    //printf("Do you want some description?\n");
-    printf("君は選ばれたんだ。選ばれるのは好きだろ？喜びたまえ。\n\n");
-    //printf("You are decided");
+    printf("Welcome to this world.\n\n");
+    //printf("説明がほしいか？\n");
+    printf("Do you want some description?\n");
+    //printf("君は選ばれたんだ。選ばれるのは好きだろ？喜びたまえ。\n\n");
+    printf("You are decided. You like to be chosen, don't you? Prease be glad.\n");
 
-    printf("これ以上の説明はない。\n");
-    printf("さあ、君のステージを選択したまえ。\n");
-    printf("まあ今は1つしかないんだがな！\n");
-    while(sum_stage!=0){
-        printf("stage1\n");
-        sum_stage--;
+    //printf("説明は以上だ。\n");
+    printf("The description is done.\n");
+    //printf("さあさあ、君のステージを選択したまえ！\n");
+    printf("Come on, come on. Choose stage number!\n\n");
+    //printf("まあ今は1つしかないんだがな！\n");
+    printf("Well, this game has only one stage now.\n");
+    for(int i=0; i<sum_stage; i++){
+        printf("%d) stage1\n", i+1);
     }
     printf("\n");
     do{
-        if (co>1 && co<=5){
-            printf("なんだ？1を入れなければ進まないぞ？\n");
-        }else if (co>5){
-            printf("ああ、やめたいのか。仕方ないな...\n");
-            printf("じゃあな。\n");
+        if (co>1 && co<=4){
+            //printf("なんだ？1を入れなければ進まないぞ？\n");
+            printf("What? Not proceed if you don't input 1.\n");
+        }else if (co>4){
+            //printf("ああ、やめたいのか。仕方ないな...\n");
+            printf("I understand. You do NOT want to play this game. OK...\n");
+            Sleep(250);
+            Sleep(250);
+            printf(".");
+            Sleep(250);
+            printf(".");
+            Sleep(250);
+            printf(".\n");
+            Sleep(250);
+            //printf("じゃあな。\n");
+            printf("Good bye.\n\n");
+            print_game_over();
             exit(0);
         }
         printf("input --> ");
@@ -116,14 +140,16 @@ void *timer(void *seconds){
     //double start_time = clock()/CLOCKS_PER_SEC;
     int millis = (*(int*)seconds) * 1000;
     Sleep(millis);
-    printf("%d millis have passed.\n", millis);
+    printf("\n%d millis have passed.\n", millis);
+    time_up_flag = 1;
+
 
     do_battle();
     exit(0);
 }
 
-void show_room_status(char *name){
-    printf("|%*s%*s|",8+(int)strlen(name)/2,name,8-(int)strlen(name)/2,"");
+void show_room_status(char *name, int position){
+    printf("|%d: %*s%*s|",position,6+(int)strlen(name)/2,name,7-(int)strlen(name)/2,"");
 }
 
 void show_route(char* a, char* c){
@@ -178,7 +204,7 @@ void show_room(Stage* stage, int room_num1, int room_num2, int room_num3){
     for(int i=0; i<3;i++){
         if(room_num1!=-1){
             module_name = get_module_name(Module_get_num(Stage_get_module(stage, room_num1,i)));
-            show_room_status(module_name);
+            show_room_status(module_name, i+1);
         }else{
             printf("                  ");
         }
@@ -186,14 +212,14 @@ void show_room(Stage* stage, int room_num1, int room_num2, int room_num3){
 
         if(room_num2!=-1){
             module_name = get_module_name(Module_get_num(Stage_get_module(stage, room_num2,i)));
-            show_room_status(module_name);
+            show_room_status(module_name, i+1);
         }else{
             printf("                  ");
         }
         printf(" ");
         if(room_num3!=-1){
             module_name = get_module_name(Module_get_num(Stage_get_module(stage, room_num3,i)));
-            show_room_status(module_name);
+            show_room_status(module_name, i+1);
         }else{
             printf("                  ");
         }
@@ -221,7 +247,7 @@ void show_room(Stage* stage, int room_num1, int room_num2, int room_num3){
 }
 
 void show_entrance_room(Stage* stage){
-    char* s = "entrance";
+    char* s = "Entrance";
     printf("                   ");
     printf(" %*s%*s ",8+(int)strlen(s)/2,s,8-(int)strlen(s)/2,"");
     printf("\n");
@@ -229,7 +255,7 @@ void show_entrance_room(Stage* stage){
     show_room(stage,-1,0,-1);
 }
 void show_before_core_room(Stage* stage){
-    char* s = "to core room";
+    char* s = "Core room";
     show_room(stage,-1,5,-1);
     show_route("  ","  ");
     printf("                   ");
@@ -252,17 +278,30 @@ void show_dungeon(Stage* stage){
 }
 
 void show_commands(){
-    printf("0) Exit this game.\n");
-    printf("1-6) Choose the number of room.\n");
-    printf("Else) Show all dungeon status.\n");
+    printf("Please input to choose choices numbers.\n");
+    printf("0) Show all dungeon status.\n");
+    printf("1) Choose room 1.\n");
+    printf("2) Choose room 2.\n");
+    printf("3) Choose room 3.\n");
+    printf("4) Choose room 4.\n");
+    printf("5) Choose room 5.\n");
+    printf("6) Choose room 6.\n");
+    printf("Else) Exit this game.\n");
 }
 
 void show_module_commands(){
     printf("Please input module number.\n");
-    printf("0) Exit this game.\n");
+    printf("0) Back to previous choices.\n");
     printf("1) Set Boss.\n");
     printf("2) Set Skeleton.\n");
-    printf("Else) Back.\n");
+}
+
+void show_position_commands(){
+    printf("Please input this module position.\n");
+    printf("0) Back to previous choices.\n");
+    printf("1) Set position 1.\n");
+    printf("2) Set position 2.\n");
+    printf("3) Set position 3.\n");
 }
 
 void set_module_to_room(Id* identificaton, Stage* stage, int room_num, int module_type, int module_position){
@@ -287,7 +326,7 @@ void set_module_to_room(Id* identificaton, Stage* stage, int room_num, int modul
 int main(){
     pthread_t pthread;
     //unsigned int max_count = 60*10;
-    unsigned int time_limit = 2;
+    unsigned int time_limit = 10;
 
     int stage_num = intro();
     int stage_cost = get_stage_cost(stage_num);
@@ -297,12 +336,13 @@ int main(){
     printf("Success to make stage.\n\n");
 
     show_dungeon(&stage);
-    while(input_num!=0){
+    while(input_num!=0 && time_up_flag==0){
+        input_num = 0;
         show_commands();
         printf("--> ");
         scanf("%d",&input_num);
         printf("\n");
-        if(input_num>=0 && input_num<100){
+        if(time_up_flag==1) break;
         switch (input_num)
         {
         case 0:
@@ -316,30 +356,28 @@ int main(){
         case 6:
             show_room(&stage,input_num-1,-1,-1);
             int input_module_type=-1;
-            while (input_module_type<0 || input_module_type>2)
+            while ((input_module_type<0 || input_module_type>2) && time_up_flag==0)
             {
                 show_module_commands();
                 printf(">>> ");
                 scanf("%d",&input_module_type);
                 printf("\n");
-                if(input_module_type==0) exit(0);
-                if(input_module_type<1){
+                if(time_up_flag==1) break;
+                if(input_module_type==0) break;
+
+                if(input_module_type >= 1 || input_module_type <= max_module_type){
+                    int input_module_position=0;
+                    while((input_module_position<1 || input_module_position>3) && time_up_flag==0){
+                        show_position_commands();
+                        printf(">>> ");
+                        scanf("%d",&input_module_position);
+                        printf("\n");
+                        if(time_up_flag==1) break;
+                        if(input_module_position==0) break;
+                        set_module_to_room(&identification,&stage,input_num-1,input_module_type+1, input_module_position-1);
+                    }
+                }else{
                     printf("That module is not signed up.\n");
-                    continue;
-                }else if(input_module_type > max_module_type){
-                    break;
-                }
-                int input_module_position=0;
-                while(input_module_position<1 || input_module_position>3){
-                    printf("Please input this module position.\n");
-                    printf("0) Exit this game.\n");
-                    printf("1-3) Set position.\n");
-                    printf("Else) Back.\n");
-                    printf(">>> ");
-                    scanf("%d",&input_module_position);
-                    printf("\n");
-                    if(input_module_position==0) exit(0);
-                    set_module_to_room(&identification,&stage,input_num-1,input_module_type+1, input_module_position-1);
                 }
             }
             show_dungeon(&stage);
@@ -349,11 +387,9 @@ int main(){
             show_dungeon(&stage);
             break;
         }
-        }else{
-            show_dungeon(&stage);
-        }
         printf("\n");
     }
+
     return 0;
 }
 
@@ -368,15 +404,16 @@ void do_battle(void){
     }
     printf("\n");
 
-    long int adventurer_length = 20;
+    long int adventurer_length = 200;
 
     int cleared_room = battle(&stage, &identification, adventurer_length);
     printf("Cleared Room : %d\n",cleared_room);
     printf("Success to battle\n");
     if(cleared_room>=6){
-        printf("The dungeon has fallen.\n");
+        printf("The dungeon has fallen.\n\n");
+        print_game_over();
     }else{
-        printf("Success to protected the dungeon!\n");
+        printf("Success to protected the dungeon!\n\n");
         print_game_clear();
     }
 }

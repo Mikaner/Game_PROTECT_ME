@@ -27,4 +27,24 @@ int main(){
     printf("length %ld\n", ((sizeof group)/(sizeof(struct Module_adventurer*))));
     char* s = "Module";
     printf(" %*s%*s \n",8+(int)strlen(s)/2,s,8-(int)strlen(s)/2,"");
+    printf("  ■■■■                                                                                            ■            ■\n");
+    printf("■      ■                                                                                            ■            ■\n");
+    printf("■            ■      ■      ■■■■      ■■■■      ■■■        ■■■        ■■■          ■            ■\n");
+    printf("  ■          ■      ■    ■■          ■■          ■■  ■■    ■■          ■■              ■            ■\n");
+    printf("    ■■      ■      ■    ■            ■            ■      ■    ■■          ■■              ■            ■\n");
+    printf("      ■■    ■      ■    ■            ■            ■■■■■      ■■■        ■■■          ■            ■\n");
+    printf("        ■    ■    ■■    ■            ■            ■                  ■■          ■■                        \n");
+    printf("■    ■■    ■    ■■      ■    ■      ■    ■    ■■    ■    ■    ■■    ■    ■■        ■            ■\n");
+    printf("  ■■■        ■■■■      ■■■■      ■■■■      ■■■■    ■■■■      ■■■■          ■            ■\n\n");
+
+    printf("                  ■\n");
+    printf("    ■■■■■    ■                                            ■■    ■■\n");
+    printf("  ■■      ■    ■                                            ■■    ■■\n");
+    printf("■■              ■        ■■■■      ■■■      ■  ■■  ■■    ■■\n");
+    printf("■                ■      ■■    ■    ■      ■    ■■      ■■    ■■\n");
+    printf("■                ■      ■      ■■          ■    ■■      ■      ■\n");
+    printf("■                ■      ■■■■■■  ■■■■■    ■        ■      ■\n");
+    printf("■■              ■      ■            ■      ■    ■        ■      ■\n");
+    printf("  ■■      ■    ■      ■■          ■    ■■    ■\n");
+    printf("    ■■■■      ■        ■■■■    ■■■■■    ■        ■■    ■■\n");
 }

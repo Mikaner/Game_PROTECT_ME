@@ -8,7 +8,7 @@
 
 
 int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_group,  int room_pointer, int adventurer_pointer, long int length){
-    printf("Buttle in Room %d\n", room_pointer+1);
+    printf("------ Buttle in Room %d ------\n", room_pointer+1);
     long int max_adventurer = length;
     printf("max_adventurer: %ld\n", max_adventurer);
     int pointer = adventurer_pointer;
