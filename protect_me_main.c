@@ -371,7 +371,7 @@ void set_module_to_room(Id* mdl_id, Stage* stage, int room_num, int module_type,
 int main(){
     pthread_t pthread;
     //unsigned int max_count = 60*10;
-    unsigned int time_limit = 60;
+    unsigned int time_limit = 60*10;
 
     int stage_num = intro();
     int stage_cost = get_stage_cost(stage_num);
@@ -449,7 +449,7 @@ void do_battle(void){
     }
     printf("\n");
 
-    long int adventurer_length = 200;
+    long int adventurer_length = 100;
 
     int cleared_room = battle(&stage, &identification, adventurer_length);
     printf("Cleared Room : %d\n",cleared_room);
