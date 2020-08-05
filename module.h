@@ -39,6 +39,7 @@ void Module_construct(Module* const p_this, Id* p_id, int module_num, int locati
 int Module_get_id(Module* const p_this);
 int Module_get_num(Module* const p_this);
 int Module_get_hitpoint(Module* const p_this);
+int Module_get_max_hitpoint(Module* const p_this);
 int Module_get_weapon(Module* const p_this);
 int Module_get_attack_power(Module* const p_this);
 int Module_get_range(Module* const p_this);

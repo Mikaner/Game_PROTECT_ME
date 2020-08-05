@@ -46,6 +46,9 @@ int Module_get_num(Module* const p_this){
 int Module_get_hitpoint(Module* const p_this){
     return p_this->hitpoint;
 }
+int Module_get_max_hitpoint(Module* const p_this){
+    return p_this->max_hitpoint;
+}
 int Module_get_weapon(Module* const p_this){
     return p_this->weapon;
 }

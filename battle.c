@@ -78,7 +78,7 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
                 }else{
                     // Move adventurer pointer
                     while(Module_get_hitpoint((Module*)&adventurer_group[pointer])<=0){
-                        printf("Pointer %d HP: %d\n",pointer,Module_get_hitpoint((Module*)&adventurer_group[pointer]));
+                        printf("Pointer %d HP: %d / %d\n",pointer,Module_get_hitpoint((Module*)&adventurer_group[pointer]),Module_get_max_hitpoint((Module*)&adventurer_group[pointer]));
                         pointer++;
                         if(pointer>=max_adventurer) break;
                     }
@@ -129,13 +129,15 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
             Rooms_set_flag(room);
         }
     }
-    printf("Front's HP: %d\n",Module_get_hitpoint(front));
-    printf("Middle's HP: %d\n",Module_get_hitpoint(middle));
-    printf("Back's HP: %d\n",Module_get_hitpoint(back));
+    printf("Front's HP: %d / %d\n",Module_get_hitpoint(front), Module_get_max_hitpoint(front));
+    printf("Middle's HP: %d / %d\n",Module_get_hitpoint(middle), Module_get_max_hitpoint(middle));
+    printf("Back's HP: %d / %d\n",Module_get_hitpoint(back), Module_get_max_hitpoint(back));
+    /*
     for(int i = 0; i<max_adventurer; i++){
         printf("Adventurer HP: %d\n", Module_get_hitpoint((Module*)(&adventurer_group[i])));
         Module_adventurer_set_position(&adventurer_group[i], 0);
     }
+    */
     Sleep(500);
     return pointer;
 }

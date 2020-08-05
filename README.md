@@ -1,5 +1,8 @@
 # Game_PROTECT_ME
-I need to implement at...
-* 割り込み処理
-* バトルの際のルート分岐の処理
-* モジュールの差別化
+## How to use.
+1. First, clone this repository.
+2. Next, compile with using make.
+```
+$ make
+```
+3. Last, execute .\protect_me.exe

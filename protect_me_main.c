@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <windows.h>
+#include <conio.h>
 #include "Id.h"
 #include "Stage.h"
 #include "Module.h"
@@ -129,6 +130,8 @@ int intro(){
             //printf("じゃあな。\n");
             printf("Good bye.\n\n");
             print_game_over();
+            printf("\n\nPlease Enter to exit.");
+            _getch();
             exit(0);
         }
         printf("input --> ");
@@ -164,6 +167,9 @@ void *timer(void *seconds){
 
 
     do_battle();
+    
+    printf("\n\nPlease Enter to exit.");
+    _getch();
     exit(0);
 }
 
@@ -370,8 +376,8 @@ void set_module_to_room(Id* mdl_id, Stage* stage, int room_num, int module_type,
 
 int main(){
     pthread_t pthread;
-    //unsigned int max_count = 60*10;
     unsigned int time_limit = 60*10;
+    //unsigned int time_limit = 10;
 
     int stage_num = intro();
     int stage_cost = get_stage_cost(stage_num);
@@ -453,7 +459,7 @@ void do_battle(void){
 
     int cleared_room = battle(&stage, &identification, adventurer_length);
     printf("Cleared Room : %d\n",cleared_room);
-    printf("Success to battle\n");
+    //printf("Success to battle\n");
     if(cleared_room>=6){
         printf("The dungeon has fallen.\n\n");
         print_game_over();
