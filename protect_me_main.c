@@ -11,17 +11,20 @@
 #include "Module_adventurer.h"
 #include "Module_boss.h"
 #include "Module_skeleton.h"
+#include "Module_zombie.h"
+#include "Module_witch.h"
+#include "Module_goblin.h"
+#include "Module_mummy.h"
+#include "Module_vampire.h"
 #include "battle.h"
 #define ESC 27
-#define num_of_adventurer 1
-#define num_of_boss 2
-#define num_of_skeleton 3
-#define max_module_type 2
+#define max_module_type 7
 
 Id identification;
 Stage stage;
 pthread_mutex_t mutex;
 int time_up_flag = 0;
+int boss_is_available = 1;
 
 char* get_module_name(int module_num);
 int intro();
@@ -41,6 +44,21 @@ char* get_module_name(int module_num){
         break;
     case 3:
         return "Skeleton";
+        break;
+    case 4:
+        return "Zombie";
+        break;
+    case 5:
+        return "Witch";
+        break;
+    case 6:
+        return "Goblins";
+        break;
+    case 7:
+        return "MummyMan";
+        break;
+    case 8:
+        return "Vampire";
         break;
     default:
         return "No Module";
@@ -76,7 +94,8 @@ int intro(){
     int input_stage_num;
     int sum_stage=1;
     int co=0;
-    printf("Welcome to this world.\n\n");
+    printf("**CAUTHION : If you executed this game by Shift-jis or anything which is not utf-8, please change character code to utf-8.**\n\n-------------------\n");
+    printf("Welcome to this world. \n\n");
     //printf("説明がほしいか？\n");
     printf("Do you want some description?\n");
     //printf("君は選ばれたんだ。選ばれるのは好きだろ？喜びたまえ。\n\n");
@@ -294,29 +313,55 @@ void show_module_commands(){
     printf("0) Back to previous choices.\n");
     printf("1) Set Boss.\n");
     printf("2) Set Skeleton.\n");
+    printf("3) Set Zombie.\n");
+    printf("4) Set Witch.\n");
+    printf("5) Set Goblins.\n");
+    printf("6) Set Mummy man.\n");
+    printf("7) Set Vampire.\n");
 }
 
 void show_position_commands(){
-    printf("Please input this module position.\n");
+    printf("Please input position number of selected module.\n");
     printf("0) Back to previous choices.\n");
     printf("1) Set position 1.\n");
     printf("2) Set position 2.\n");
     printf("3) Set position 3.\n");
 }
 
-void set_module_to_room(Id* identificaton, Stage* stage, int room_num, int module_type, int module_position){
+void set_module_to_room(Id* mdl_id, Stage* stage, int room_num, int module_type, int module_position){
     Rooms* room = Stage_get_room(stage, room_num);
     Module mdl = {0,-1,0,0,0,0,0,0,0,0,0,0,0,0};
     printf("type is :%d\n",module_type);
     switch (module_type)
     {
     case num_of_boss:
-        Module_boss_construct((Module_boss*)&mdl, identificaton);
+        Module_boss_construct((Module_boss*)&mdl, mdl_id);
         Rooms_set_module(room, mdl, module_position);
         break;
     case num_of_skeleton:
-        Module_skeleton_construct((Module_skeleton*)&mdl, identificaton);
+        Module_skeleton_construct((Module_skeleton*)&mdl, mdl_id);
         Rooms_set_module(room, mdl, module_position);
+        break;
+    case num_of_zombie:
+        Module_zombie_construct((Module_zombie*)&mdl, mdl_id);
+        Rooms_set_module(room, mdl, module_position);
+        break;
+    case num_of_witch:
+        Module_witch_construct((Module_witch*)&mdl, mdl_id);
+        Rooms_set_module(room, mdl, module_position);
+        break;
+    case num_of_goblin:
+        Module_goblin_construct((Module_goblin*)&mdl, mdl_id);
+        Rooms_set_module(room, mdl, module_position);
+        break;
+    case num_of_mummy:
+        Module_mummy_construct((Module_mummy*)&mdl, mdl_id);
+        Rooms_set_module(room, mdl, module_position);
+        break;
+    case num_of_vampire:
+        Module_vampire_construct((Module_vampire*)&mdl, mdl_id);
+        Rooms_set_module(room, mdl, module_position);
+        break;
     default:
         printf("404 Module not found.\n");
         break;
@@ -326,7 +371,7 @@ void set_module_to_room(Id* identificaton, Stage* stage, int room_num, int modul
 int main(){
     pthread_t pthread;
     //unsigned int max_count = 60*10;
-    unsigned int time_limit = 10;
+    unsigned int time_limit = 60;
 
     int stage_num = intro();
     int stage_cost = get_stage_cost(stage_num);
@@ -356,7 +401,7 @@ int main(){
         case 6:
             show_room(&stage,input_num-1,-1,-1);
             int input_module_type=-1;
-            while ((input_module_type<0 || input_module_type>2) && time_up_flag==0)
+            while ((input_module_type<0 || input_module_type>max_module_type) && time_up_flag==0)
             {
                 show_module_commands();
                 printf(">>> ");

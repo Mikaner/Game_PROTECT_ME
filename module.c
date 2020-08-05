@@ -25,8 +25,8 @@ void Module_construct(Module* const p_this, Id* p_id,
     p_this->module_num = module_num;
     p_this->level = 1;
     p_this->levelup_base_cost = 5;
-    p_this->hitpoint = 10;
-    p_this->max_hitpoint = 10;
+    p_this->hitpoint = 100;
+    p_this->max_hitpoint = 100;
     p_this->location = location;
     p_this->weapon = weapon;
     p_this->range = range;

@@ -1,6 +1,20 @@
 #include "Id.h"
 #ifndef CLASS_MODULE_H
 #define CLASS_MODULE_H
+#define num_of_adventurer 1
+#define num_of_boss 2
+#define num_of_skeleton 3
+#define num_of_zombie 4
+#define num_of_witch 5
+#define num_of_goblin 6
+#define num_of_mummy 7
+#define num_of_vampire 8
+#define physical_weapon 0
+#define magical_weapon 1
+#define location_room 0
+#define location_adventurer 1
+#define normal_power 16
+#define boss_power 64
 
 typedef struct module{
     int id;

@@ -132,10 +132,10 @@ int battle_in_room(Stage* stage, Rooms* room, Module_adventurer* adventurer_grou
     printf("Front's HP: %d\n",Module_get_hitpoint(front));
     printf("Middle's HP: %d\n",Module_get_hitpoint(middle));
     printf("Back's HP: %d\n",Module_get_hitpoint(back));
-    /*for(int i = 0; i<max_adventurer; i++){
+    for(int i = 0; i<max_adventurer; i++){
         printf("Adventurer HP: %d\n", Module_get_hitpoint((Module*)(&adventurer_group[i])));
         Module_adventurer_set_position(&adventurer_group[i], 0);
-    }*/
+    }
     Sleep(500);
     return pointer;
 }
