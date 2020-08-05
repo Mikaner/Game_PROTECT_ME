@@ -7,4 +7,7 @@ Windows only.
 ```
 $ make
 ```
-3. Last, execute .\protect_me.exe
+3. Last, execute `chcp 65001` and `.\protect_me.exe`
+## If you get infinity loop.
+At first, please be cool.
+And close your cmd or powershell.
