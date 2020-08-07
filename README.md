@@ -1,13 +1,44 @@
 # Game_PROTECT_ME
-## Environment.
-Windows only.
-## How to use.
-1. First, clone this repository.
-2. Next, compile with using make.
+## 対応環境
+- Windows - gcc
+## 使い方
+1. まず、このリポジトリをクローンorダウンロードしてください。
+2. 次に`make`を使用してコンパイルしてください。
 ```
-$ make
+> make
 ```
-3. Last, execute `chcp 65001` and `.\protect_me.exe`
-## If you get infinity loop.
-At first, please be cool.
-And close your cmd or powershell.
+3. 最後に`chcp 65001`を実行して文字コードをutf-8にした後、`.\protect_me.exe`を実行します。
+```
+> chcp 65001
+> .\protect_me.exe
+```
+
+## もし無限ループが発生したら
+落ち着いて、実行しているコマンドプロンプトあるいはパワーシェルを終了してください。
+
+## モジュール説明
+### Boss
+ボスです。非常に強いです。
+### Skeleton
+スケルトン兵です。
+モジュールを一つまたいで攻撃ができます。
+骨なのでもろく、HPが低いです。
+### Zombie
+ゾンビ兵です。
+耐久力が高く、HPも高いです。
+### Witch
+魔女です。
+モジュールを二つまたいで攻撃ができます。
+HPが低い代わりに魔術攻撃ができます。また魔術耐久力も高いです。
+### Goblin
+ゴブリン兵です。
+数が多いため、倒れにくいです。
+一匹一匹は弱いため、耐久力はないです。
+### Mummy Man
+ミイラ男です。
+生前のステータスが反映されるため、耐久力に個体差があります。
+しかし、魔法攻撃には弱いです。
+### Vampire
+吸血鬼です。
+個体差が激しく、強いものはBossに匹敵する強さです。
+しかしながら、弱いものはどのモジュールより弱くなります。
