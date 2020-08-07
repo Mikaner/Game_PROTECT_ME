@@ -100,7 +100,7 @@ int intro(){
     //printf("説明がほしいか？\n");
     printf("Do you want some description?\n");
     //printf("君は選ばれたんだ。選ばれるのは好きだろ？喜びたまえ。\n\n");
-    printf("You are decided. You like to be chosen, don't you? Prease be glad.\n");
+    printf("You are decided. You like to be chosen, don't you? Please be glad.\n");
 
     //printf("説明は以上だ。\n");
     printf("The description is done.\n");
@@ -376,7 +376,7 @@ void set_module_to_room(Id* mdl_id, Stage* stage, int room_num, int module_type,
 
 int main(){
     pthread_t pthread;
-    unsigned int time_limit = 60*10;
+    unsigned int time_limit = 60*5;
     //unsigned int time_limit = 10;
 
     int stage_num = intro();
