@@ -455,7 +455,7 @@ void do_battle(void){
     }
     printf("\n");
 
-    long int adventurer_length = 100;
+    long int adventurer_length = 25;
 
     int cleared_room = battle(&stage, &identification, adventurer_length);
     printf("Cleared Room : %d\n",cleared_room);
