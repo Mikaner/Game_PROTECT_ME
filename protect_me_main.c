@@ -376,7 +376,7 @@ void set_module_to_room(Id* mdl_id, Stage* stage, int room_num, int module_type,
 
 int main(){
     pthread_t pthread;
-    unsigned int time_limit = 60*5;
+    unsigned int time_limit = 60*10;
     //unsigned int time_limit = 10;
 
     int stage_num = intro();
@@ -433,7 +433,12 @@ int main(){
             }
             show_dungeon(&stage);
             break;
-        case -200:
+        case -254:
+            do_battle();
+    
+            printf("\n\nPlease Enter to exit.");
+            _getch();
+            exit(0);
         default:
             show_dungeon(&stage);
             break;
